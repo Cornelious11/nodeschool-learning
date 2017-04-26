@@ -27,7 +27,8 @@ urls.forEach(function(url){
             // Placing all orders into one JSON object
             data.orders.forEach(function (order){
                 order.products.forEach(function(product){
-                    if(product.title === 'Cookie'){
+                    // Ignoring any orders that do NOT contain Cookies and are not already filled
+                    if(product.title === 'Cookie' && order.fulfilled !== true){
                         object.push(order)
                     }
                 })
@@ -36,13 +37,38 @@ urls.forEach(function(url){
             // Condition if we have reached the end of the input urls
             if(count == urls.length){
                 object.sort(orderSort)
-                console.log(object)
+                fillOrders()
+                console.log(output)
             }
         })
     })
 })
 
+/**
+ * Checks the number of available cookies and fulfills the cookies
+ */
+function fillOrders(){
+    var notfilled = []
+    object.forEach(function (order){
+        if(avail >= numCookies(order)){
+            avail -= numCookies(order)
+            order.fulfilled = true
+        } else {
+            notfilled.push(Number(order.id))
+        }
+    })
+    createObj(avail, notfilled)
+}
 
+function numCookies(a){
+    var cookies = 0
+    a.products.forEach(function (product){
+        if(product.title === 'Cookie'){
+            cookies = product.amount
+        }
+    })
+    return cookies
+}
 
 /**
  * Compares amount of cookies ordered, and if the same will compare order ID
@@ -50,18 +76,8 @@ urls.forEach(function(url){
  * @param {*} b second item to compare
  */
 function orderSort(a,b){
-    var aVal = 0;
-    var bVal = 0;
-    a.products.forEach(function (product){
-        if(product.title === 'Cookie'){
-            aVal = product.amount
-        }
-    })
-    b.products.forEach(function (product){
-        if(product.title === 'Cookie'){
-            bVal = product.amount
-        }
-    })
+    var aVal = numCookies(a)
+    var bVal = numCookies(b)
     if(aVal !== bVal){
         return bVal - aVal
     } else {
