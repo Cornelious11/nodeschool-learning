@@ -11,19 +11,39 @@
 
 */
 var https = require('https')
-var url = "https://backend-challenge-fall-2017.herokuapp.com/orders.json"
+
+var urls = ["https://backend-challenge-fall-2017.herokuapp.com/orders.json","https://backend-challenge-fall-2017.herokuapp.com/orders.json?page=2"]
 
 var avail
-var object
+var count = 0
+var object = []
 var output = []
-
-https.get(url, function (response){
-    response.on('data', function (chunk){
-        object = JSON.parse(chunk)
-        avail = Number(object.available_cookies)
-        
+// Looping through all API urls
+urls.forEach(function(url){
+    https.get(url, function(request){
+        request.on('data',function(chunk){
+            data = JSON.parse(chunk)
+            avail = Number(data.available_cookies)
+            // Placing all orders into one JSON object
+            data.orders.forEach(function (order){
+                order.products.forEach(function(product){
+                    if(product.title === 'Cookie'){
+                        object.push(order)
+                    }
+                })
+            })
+            count ++
+            // Condition if we have reached the end of the input urls
+            if(count == urls.length){
+                object.sort(orderSort(a,b))
+            }
+        })
     })
 })
+
+function orderSort(a,b){
+    a.products.forEach()
+}
 
 function sum(a,b){
     return Number(a) + Number(b)
