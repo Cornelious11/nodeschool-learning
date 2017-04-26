@@ -35,14 +35,31 @@ urls.forEach(function(url){
             count ++
             // Condition if we have reached the end of the input urls
             if(count == urls.length){
-                object.sort(orderSort(a,b))
+                object.sort(orderSort)
+                console.log(object)
             }
         })
     })
 })
 
 function orderSort(a,b){
-    a.products.forEach()
+    var aVal = 0;
+    var bVal = 0;
+    a.products.forEach(function (product){
+        if(product.title === 'Cookie'){
+            aVal = product.amount
+        }
+    })
+    b.products.forEach(function (product){
+        if(product.title === 'Cookie'){
+            bVal = product.amount
+        }
+    })
+    if(aVal !== bVal){
+        return bVal - aVal
+    } else {
+        return a.id - b.id
+    }
 }
 
 function sum(a,b){
