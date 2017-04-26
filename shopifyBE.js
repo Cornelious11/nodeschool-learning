@@ -42,6 +42,13 @@ urls.forEach(function(url){
     })
 })
 
+
+
+/**
+ * Compares amount of cookies ordered, and if the same will compare order ID
+ * @param {*} a first item to compare
+ * @param {*} b second item to compare
+ */
 function orderSort(a,b){
     var aVal = 0;
     var bVal = 0;
@@ -62,10 +69,11 @@ function orderSort(a,b){
     }
 }
 
-function sum(a,b){
-    return Number(a) + Number(b)
-}
-
+/**
+ * Creating the JSON object to send back
+ * @param {*} remaining Integer value of remaining cookies
+ * @param {*} unfulfilled Array of order ID's that were not fulfilled
+ */
 function createObj(remaining, unfulfilled){
     output.push({"remaining_cookies": remaining, "unfulfilled_orders": unfulfilled})
 }
