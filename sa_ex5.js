@@ -1,4 +1,5 @@
 var through = require('through2')
+var split = require('split')
 var stream = through(write, end)
 
 function write(buffer, encoding, next){
